@@ -1,8 +1,7 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const server = express();
 
-let express = require('express');
-let bodyParser = require('body-parser');
-
-let server = express();
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 
