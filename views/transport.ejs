@@ -1,75 +1,75 @@
 <!DOCTYPE html>
-
 <html>
-<head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-</head>
-<body>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body>
 
-<ul>
-    <li><a href="1">Trip 1</a> </li>
-    <li><a href="2">Trip 2</a> </li>
-    <li><a href="3">Trip 3</a> </li>
-    <li><a href="4">Trip 4</a> </li>
-    <li><a href="5">Trip 5</a> </li>
-    <li><a href="6">Trip 6</a> </li>
-    <li><a href="7">Trip 7</a> </li>
-    <li><a href="8">Trip 8</a> </li>
-    <li><a href="9">Trip 9</a> </li>
-    <li><a href="10">Trip 10</a> </li>
-</ul>
-<div id="map"></div>
-<script>
-  function initMap() {
-    var pointA = new google.maps.LatLng(<%= result.coordinates_from.lat %>, <%= result.coordinates_from.lon %>),
-      pointB = new google.maps.LatLng(<%= result.coordinates_to.lat %>, <%= result.coordinates_to.lon %>),
-      myOptions = {
-        zoom: 7
-      },
-      map = new google.maps.Map(document.getElementById('map'), myOptions),
+    <ul>
+        <li><a href="1">Trip 1</a> </li>
+        <li><a href="2">Trip 2</a> </li>
+        <li><a href="3">Trip 3</a> </li>
+        <li><a href="4">Trip 4</a> </li>
+        <li><a href="5">Trip 5</a> </li>
+        <li><a href="6">Trip 6</a> </li>
+        <li><a href="7">Trip 7</a> </li>
+        <li><a href="8">Trip 8</a> </li>
+        <li><a href="9">Trip 9</a> </li>
+        <li><a href="10">Trip 10</a> </li>
+    </ul>
 
-      directionsService = new google.maps.DirectionsService,
-      directionsDisplay = new google.maps.DirectionsRenderer({
-        map: map
-      }),
-      markerA = new google.maps.Marker({
-        position: pointA,
-        title: "<%= result.title %>",
-        label: "Origin",
-        map: map
-      }),
-      markerB = new google.maps.Marker({
-        position: pointB,
-        title: "<%= result.title %>",
-        label: "Destination",
-        map: map
-      });
-    // get route from A to B
-    showTransports(directionsService, directionsDisplay, pointA, pointB);
+    <div id="map"></div>
 
-  }
+    <script>
+      function initMap() {
+        var pointA = new google.maps.LatLng(<%= result.coordinates_from.lat %>, <%= result.coordinates_from.lon %>),
+          pointB = new google.maps.LatLng(<%= result.coordinates_to.lat %>, <%= result.coordinates_to.lon %>),
+          myOptions = {
+            zoom: 7
+          },
+          map = new google.maps.Map(document.getElementById('map'), myOptions),
 
-  function showTransports(directionsService, directionsDisplay, pointA, pointB) {
-    directionsService.route({
-      origin: pointA,
-      destination: pointB,
-      travelMode: google.maps.TravelMode.<%= travel %>
-    }, function(response, status) {
-      if (status === google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response);
-      } else {
-        window.alert('No transport possible ');
+          directionsService = new google.maps.DirectionsService,
+          directionsDisplay = new google.maps.DirectionsRenderer({
+            map: map
+          }),
+          markerA = new google.maps.Marker({
+            position: pointA,
+            title: "<%= result.title %>",
+            label: "Origin",
+            map: map
+          }),
+          markerB = new google.maps.Marker({
+            position: pointB,
+            title: "<%= result.title %>",
+            label: "Destination",
+            map: map
+          });
+        // get route from A to B
+        showTransports(directionsService, directionsDisplay, pointA, pointB);
+
       }
-    });
-  }
 
-</script>
+      function showTransports(directionsService, directionsDisplay, pointA, pointB) {
+        directionsService.route({
+          origin: pointA,
+          destination: pointB,
+          travelMode: google.maps.TravelMode.<%= travel %>
+        }, function(response, status) {
+          if (status === google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('No transport possible ');
+          }
+        });
+      }
 
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBn-zGMtID9BJG89JkwW1_V8-Rsy973Dbc&callback=initMap">
-</script>
+    </script>
 
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBn-zGMtID9BJG89JkwW1_V8-Rsy973Dbc&callback=initMap">
+    </script>
 
-</body>
+    </body>
 </html>

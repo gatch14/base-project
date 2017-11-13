@@ -1,8 +1,8 @@
-var fs = require('fs');
-var util = require('util');
+let fs = require('fs');
+let util = require('util');
 
-var obj = fs.readFileSync('data/transports.json', 'utf-8');
-var out  = JSON.parse(obj);
+let obj = fs.readFileSync('data/transports.json', 'utf-8');
+let out  = JSON.parse(obj);
 
 const show = (req, res, next) => {
   res.render('transport', { title: 'Googlemap', result: out.transports[1], travel: 'DRIVING' });
@@ -26,7 +26,7 @@ const showTransport = (req, res, next) => {
       });
       return;
     }
-    var transport = req.params.transport - 1;
+    let transport = req.params.transport - 1;
 
     const travelMode = () => {
       if (out.transports[transport].vehicule === 'bike') {
