@@ -6,4 +6,6 @@ router.get('/', Controller.show);
 
 router.get('/:transport', Controller.showTransport);
 
+router.post('/transport/save', Controller.save);
+
 module.exports = router;

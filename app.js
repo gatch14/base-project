@@ -1,4 +1,5 @@
 const express = require('express');
+const Sequelize = require('sequelize');
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
@@ -10,6 +11,18 @@ const index = require('./routes/index');
 const transport = require('./routes/transport');
 
 const app = express();
+
+const sequelize = new Sequelize('transport', 'gatch14@gmail.com', 'b021080', {
+  host: 'localhost',
+  dialect: 'postgres',
+
+  pool: {
+    max: 3,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  }
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
