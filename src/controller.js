@@ -4,7 +4,7 @@ const obj = fs.readFileSync('data/transports.json', 'utf-8');
 const out = JSON.parse(obj);
 
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('winn', 'postgres', '021080', {
+const sequelize = new Sequelize('winn', 'postgres', '123456', {
   host: 'localhost',
   dialect: 'postgres',
 
