@@ -170,8 +170,130 @@ const save = (req, res) => {
 
 };
 
+// update tra
+const update = (req, res) => {
+  'use strict';
+  const { id, title, fromLat, fromLon, toLat, toLon, vehicule, comment } = req.body;
+
+  req.check({
+    id: {
+      notEmpty: {
+        errorMessage: 'error_required'
+      },
+      isInt: {
+        options: [ { min: 1 } ],
+        errorMessage: 'mus_be_a_valid_id'
+      }
+    },
+    title: {
+      optional: true,
+      isLength: {
+        options: [ { min: 5, max: 250 } ],
+        errorMessage: 'error_min_max'
+      }
+    },
+    fromLat: {
+      optional: true,
+      isFloat: {
+        options: [ { min: 0, max: 90 } ],
+        errorMessage: 'error_data_lat'
+      }
+    },
+    fromLon: {
+      optional: true,
+      isFloat: {
+        options: [ { min: -180, max: 180 } ],
+        errorMessage: 'error_data_lon'
+      }
+    },
+    toLat: {
+      optional: true,
+      isFloat: {
+        options: [ { min: 0, max: 90 } ],
+        errorMessage: 'error_data_lat'
+      }
+    },
+    toLon: {
+      optional: true,
+      isFloat: {
+        options: [ { min: -180, max: 180 } ],
+        errorMessage: 'error_data_lon'
+      }
+    },
+    vehicule: {
+      optional: true,
+      isIn: {
+        options: [ [ 'DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT' ] ],
+        errorMessage: 'must_be_a_valid_travel_mode'
+      }
+    },
+    comment: {
+      optional: true
+    }
+  });
+
+  req.getValidationResult().then((result) => {
+    if (!result.isEmpty()) {
+      res.json({
+        result: 'error',
+        message: util.inspect(result.array())
+      });
+      return;
+    }
+    // model
+    const Travel = req.connect.define('transport', {
+      title: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      fromLat: {
+        type: Sequelize.DECIMAL,
+        allowNull: true
+      },
+      fromLon: {
+        type: Sequelize.DECIMAL,
+        allowNull: true
+      },
+      toLat: {
+        type: Sequelize.DECIMAL,
+        allowNull: true
+      },
+      toLon: {
+        type: Sequelize.DECIMAL,
+        allowNull: true
+      },
+      vehicule: {
+        type: Sequelize.STRING,
+        isIn: [ [ 'DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT' ] ],
+        allowNull: true
+      },
+      comment: {
+        type: Sequelize.STRING,
+        allowNull: true
+      }
+    });
+
+    Travel
+      .update({
+        title: title,
+        fromLat: fromLat,
+        fromLon: fromLon,
+        toLat: toLat,
+        toLon: toLon,
+        vehicule: vehicule,
+        comment: comment
+      },
+      { where: { id: id } }
+      )
+      .then((travel) => {
+        res.json({ result: travel });
+      });
+  });
+};
+
 module.exports = {
   show,
   showTransport,
-  save
+  save,
+  update
 };
