@@ -291,9 +291,45 @@ const update = (req, res) => {
   });
 };
 
+const destroy = (req, res) => {
+  'use strict';
+  req.check({
+    id: {
+      notEmpty: {
+        errorMessage: 'error_required'
+      },
+      isInt: {
+        options: [ { min: 1 } ],
+        errorMessage: 'mus_be_a_valid_id'
+      }
+    }
+  });
+
+  req.getValidationResult().then((result) => {
+    if (!result.isEmpty()) {
+      res.json({
+        result: 'error',
+        message: util.inspect(result.array())
+      });
+      return;
+    }
+    const Travel = req.connect.define('transport');
+
+    Travel
+      .destroy({
+        where: { id: req.body.id }
+      })
+      .then((travel) => {
+        res.json({ result: travel });
+      });
+  });
+
+};
+
 module.exports = {
   show,
   showTransport,
   save,
-  update
+  update,
+  destroy
 };
