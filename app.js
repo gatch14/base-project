@@ -21,6 +21,7 @@ const connect = function (req, res, next) {
   req.connect = sequelize;
   next();
 };
+
 const index = require('./routes/index');
 const transport = require('./routes/transport');
 

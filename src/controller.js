@@ -3,7 +3,6 @@ const util = require('util');
 const obj = fs.readFileSync('data/transports.json', 'utf-8');
 const out = JSON.parse(obj);
 const Sequelize = require('sequelize');
-
 const show = (req, res) => {
   'use strict';
   res.render('transport', { title: 'Googlemap', result: out.transports[ 1 ], travel: 'DRIVING' });
@@ -121,7 +120,7 @@ const save = (req, res) => {
     }
 
     // model
-    const travel = req.connect.define('transport', {
+    const Travel = req.connect.define('transport', {
       title: {
         type: Sequelize.STRING,
         allowNull: false
@@ -153,8 +152,8 @@ const save = (req, res) => {
       }
     });
 
-    travel.sync({ force: false }).then(() => {
-      return travel.create({
+    Travel
+      .build({
         title: req.body.title,
         fromLat: req.body.fromLat,
         fromLon: req.body.fromLon,
@@ -162,9 +161,11 @@ const save = (req, res) => {
         toLon: req.body.toLon,
         vehicule: req.body.vehicule,
         comment: req.body.comment
+      })
+      .save()
+      .then((travel) => {
+        res.json({ travel });
       });
-    });
-    res.json('ok');
   });
 
 };
