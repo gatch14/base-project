@@ -5,7 +5,22 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('winn', 'postgres', '123456', {
+  host: 'localhost',
+  dialect: 'postgres',
 
+  pool: {
+    max: 3,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  }
+});
+const connect = function (req, res, next) {
+  req.connect = sequelize;
+  next();
+};
 const index = require('./routes/index');
 const transport = require('./routes/transport');
 
@@ -23,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressValidator());
-
+app.use(connect);
 app.use('/', index);
 app.use('/api/transports', transport);
 

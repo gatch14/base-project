@@ -2,19 +2,7 @@ const fs = require('fs');
 const util = require('util');
 const obj = fs.readFileSync('data/transports.json', 'utf-8');
 const out = JSON.parse(obj);
-
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('winn', 'postgres', '123456', {
-  host: 'localhost',
-  dialect: 'postgres',
-
-  pool: {
-    max: 3,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  }
-});
 
 const show = (req, res) => {
   'use strict';
@@ -133,7 +121,7 @@ const save = (req, res) => {
     }
 
     // model
-    const travel = sequelize.define('transport', {
+    const travel = req.connect.define('transport', {
       title: {
         type: Sequelize.STRING,
         allowNull: false
