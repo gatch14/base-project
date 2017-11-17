@@ -3,22 +3,16 @@ const util = require('util');
 const obj = fs.readFileSync('data/transports.json', 'utf-8');
 const out = JSON.parse(obj);
 const Sequelize = require('sequelize');
+const { showTransportRules, saveRules, updateRules, destroyRules } = require('./rules');
+
 const show = (req, res) => {
   'use strict';
   res.render('transport', { title: 'Googlemap', result: out.transports[ 1 ], travel: 'DRIVING' });
 };
-
 // show travel with param id
 const showTransport = (req, res) => {
   'use strict';
-  req.check({
-    transport: {
-      isInt: {
-        options: [ { min: 1, max: out.transports.length } ],
-        errorMessage: 'No transport'
-      }
-    }
-  });
+  req.check(showTransportRules);
 
   req.getValidationResult().then((result) => {
     if (!result.isEmpty()) {
@@ -50,65 +44,7 @@ const showTransport = (req, res) => {
 // save travel in db
 const save = (req, res) => {
   'use strict';
-  req.check({
-    title: {
-      notEmpty: {
-        errorMessage: 'error_required'
-      },
-      isLength: {
-        options: [ { min: 5, max: 250 } ],
-        errorMessage: 'error_min_max'
-      }
-    },
-    fromLat: {
-      notEmpty: {
-        errorMessage: 'error_required'
-      },
-      isFloat: {
-        options: [ { min: 0, max: 90 } ],
-        errorMessage: 'error_data_lat'
-      }
-    },
-    fromLon: {
-      notEmpty: {
-        errorMessage: 'error_required'
-      },
-      isFloat: {
-        options: [ { min: -180, max: 180 } ],
-        errorMessage: 'error_data_lon'
-      }
-    },
-    toLat: {
-      notEmpty: {
-        errorMessage: 'error_required'
-      },
-      isFloat: {
-        options: [ { min: 0, max: 90 } ],
-        errorMessage: 'error_data_lat'
-      }
-    },
-    toLon: {
-      notEmpty: {
-        errorMessage: 'error_required'
-      },
-      isFloat: {
-        options: [ { min: -180, max: 180 } ],
-        errorMessage: 'error_data_lon'
-      }
-    },
-    vehicule: {
-      notEmpty: {
-        errorMessage: 'error_required'
-      },
-      isIn: {
-        options: [ [ 'DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT' ] ],
-        errorMessage: 'must_be_a_valid_travel_mode'
-      }
-    },
-    comment: {
-      optional: true
-    }
-  });
+  req.check(saveRules);
 
   req.getValidationResult().then((result) => {
     if (!result.isEmpty()) {
@@ -175,62 +111,7 @@ const update = (req, res) => {
   'use strict';
   const { id, title, fromLat, fromLon, toLat, toLon, vehicule, comment } = req.body;
 
-  req.check({
-    id: {
-      notEmpty: {
-        errorMessage: 'error_required'
-      },
-      isInt: {
-        options: [ { min: 1 } ],
-        errorMessage: 'mus_be_a_valid_id'
-      }
-    },
-    title: {
-      optional: true,
-      isLength: {
-        options: [ { min: 5, max: 250 } ],
-        errorMessage: 'error_min_max'
-      }
-    },
-    fromLat: {
-      optional: true,
-      isFloat: {
-        options: [ { min: 0, max: 90 } ],
-        errorMessage: 'error_data_lat'
-      }
-    },
-    fromLon: {
-      optional: true,
-      isFloat: {
-        options: [ { min: -180, max: 180 } ],
-        errorMessage: 'error_data_lon'
-      }
-    },
-    toLat: {
-      optional: true,
-      isFloat: {
-        options: [ { min: 0, max: 90 } ],
-        errorMessage: 'error_data_lat'
-      }
-    },
-    toLon: {
-      optional: true,
-      isFloat: {
-        options: [ { min: -180, max: 180 } ],
-        errorMessage: 'error_data_lon'
-      }
-    },
-    vehicule: {
-      optional: true,
-      isIn: {
-        options: [ [ 'DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT' ] ],
-        errorMessage: 'must_be_a_valid_travel_mode'
-      }
-    },
-    comment: {
-      optional: true
-    }
-  });
+  req.check(updateRules);
 
   req.getValidationResult().then((result) => {
     if (!result.isEmpty()) {
@@ -293,17 +174,7 @@ const update = (req, res) => {
 
 const destroy = (req, res) => {
   'use strict';
-  req.check({
-    id: {
-      notEmpty: {
-        errorMessage: 'error_required'
-      },
-      isInt: {
-        options: [ { min: 1 } ],
-        errorMessage: 'mus_be_a_valid_id'
-      }
-    }
-  });
+  req.check(destroyRules);
 
   req.getValidationResult().then((result) => {
     if (!result.isEmpty()) {
