@@ -2,13 +2,14 @@ const fs = require('fs');
 const util = require('util');
 const obj = fs.readFileSync('data/transports.json', 'utf-8');
 const out = JSON.parse(obj);
-const Sequelize = require('sequelize');
 const { showTransportRules, saveRules, updateRules, destroyRules } = require('./rules');
+const models = require('../models');
 
 const show = (req, res) => {
   'use strict';
   res.render('transport', { title: 'Googlemap', result: out.transports[ 1 ], travel: 'DRIVING' });
 };
+
 // show travel with param id
 const showTransport = (req, res) => {
   'use strict';
@@ -55,40 +56,7 @@ const save = (req, res) => {
       return;
     }
 
-    // model
-    const Travel = req.connect.define('transport', {
-      title: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      fromLat: {
-        type: Sequelize.DECIMAL,
-        allowNull: false
-      },
-      fromLon: {
-        type: Sequelize.DECIMAL,
-        allowNull: false
-      },
-      toLat: {
-        type: Sequelize.DECIMAL,
-        allowNull: false
-      },
-      toLon: {
-        type: Sequelize.DECIMAL,
-        allowNull: false
-      },
-      vehicule: {
-        type: Sequelize.STRING,
-        isIn: [ [ 'DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT' ] ],
-        allowNull: false
-      },
-      comment: {
-        type: Sequelize.STRING,
-        allowNull: true
-      }
-    });
-
-    Travel
+    models.Travel
       .build({
         title: req.body.title,
         fromLat: req.body.fromLat,
@@ -106,7 +74,7 @@ const save = (req, res) => {
 
 };
 
-// update tra
+// update travel
 const update = (req, res) => {
   'use strict';
   const { id, title, fromLat, fromLon, toLat, toLon, vehicule, comment } = req.body;
@@ -121,57 +89,29 @@ const update = (req, res) => {
       });
       return;
     }
-    // model
-    const Travel = req.connect.define('transport', {
-      title: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      fromLat: {
-        type: Sequelize.DECIMAL,
-        allowNull: true
-      },
-      fromLon: {
-        type: Sequelize.DECIMAL,
-        allowNull: true
-      },
-      toLat: {
-        type: Sequelize.DECIMAL,
-        allowNull: true
-      },
-      toLon: {
-        type: Sequelize.DECIMAL,
-        allowNull: true
-      },
-      vehicule: {
-        type: Sequelize.STRING,
-        isIn: [ [ 'DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT' ] ],
-        allowNull: true
-      },
-      comment: {
-        type: Sequelize.STRING,
-        allowNull: true
-      }
-    });
 
-    Travel
-      .update({
-        title: title,
-        fromLat: fromLat,
-        fromLon: fromLon,
-        toLat: toLat,
-        toLon: toLon,
-        vehicule: vehicule,
-        comment: comment
-      },
-      { where: { id: id } }
-      )
+    models.Travel
+      .findOne({
+        id: id
+      })
       .then((travel) => {
-        res.json({ result: travel });
+        travel.updateAttributes({
+          title: title || travel.title,
+          fromLat: fromLat || travel.fromLat,
+          fromLon: fromLon || travel.fromLon,
+          toLat: toLat || travel.toLat,
+          toLon: toLon || travel.toLon,
+          vehicule: vehicule || travel.vehicule,
+          comment: comment || travel.comment
+        });
+      })
+      .then(() => {
+        res.json({ result: 'ok' });
       });
   });
 };
 
+// destroy travel
 const destroy = (req, res) => {
   'use strict';
   req.check(destroyRules);
@@ -184,9 +124,8 @@ const destroy = (req, res) => {
       });
       return;
     }
-    const Travel = req.connect.define('transport');
 
-    Travel
+    models.Travel
       .destroy({
         where: { id: req.body.id }
       })
@@ -202,5 +141,6 @@ module.exports = {
   showTransport,
   save,
   update,
-  destroy
+  destroy,
+  test
 };
