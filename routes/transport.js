@@ -12,4 +12,6 @@ router.put('/transport/update', Controller.update);
 
 router.post('/transport/destroy', Controller.destroy);
 
+router.post('/transport/showOne', Controller.showOne);
+
 module.exports = router;

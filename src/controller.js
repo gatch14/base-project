@@ -2,7 +2,7 @@ const fs = require('fs');
 const util = require('util');
 const obj = fs.readFileSync('data/transports.json', 'utf-8');
 const out = JSON.parse(obj);
-const { showTransportRules, saveRules, updateRules, destroyRules } = require('./rules');
+const { showTransportRules, saveRules, updateRules, findIdRules } = require('./rules');
 const models = require('../models');
 
 const show = (req, res) => {
@@ -69,6 +69,9 @@ const save = (req, res) => {
       .save()
       .then((travel) => {
         res.json({ travel });
+      })
+      .catch((error) => {
+        res.json({ result: error });
       });
   });
 
@@ -107,6 +110,9 @@ const update = (req, res) => {
       })
       .then(() => {
         res.json({ result: 'ok' });
+      })
+      .catch((error) => {
+        res.json({ result: error });
       });
   });
 };
@@ -114,7 +120,7 @@ const update = (req, res) => {
 // destroy travel
 const destroy = (req, res) => {
   'use strict';
-  req.check(destroyRules);
+  req.check(findIdRules);
 
   req.getValidationResult().then((result) => {
     if (!result.isEmpty()) {
@@ -131,6 +137,37 @@ const destroy = (req, res) => {
       })
       .then((travel) => {
         res.json({ result: travel });
+      })
+      .catch((error) => {
+        res.json({ result: error });
+      });
+  });
+
+};
+
+// show transport from db
+const showOne = (req, res) => {
+  'use strict';
+  req.check(findIdRules);
+
+  req.getValidationResult().then((result) => {
+    if (!result.isEmpty()) {
+      res.json({
+        result: 'error',
+        message: util.inspect(result.array())
+      });
+      return;
+    }
+
+    models.Travel
+      .findOne({
+        where: { id: req.body.id }
+      })
+      .then((travel) => {
+        res.json({ result: travel });
+      })
+      .catch((error) => {
+        res.json({ result: error });
       });
   });
 
@@ -142,5 +179,5 @@ module.exports = {
   save,
   update,
   destroy,
-  test
+  showOne
 };

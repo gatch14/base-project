@@ -124,7 +124,7 @@ const updateRules = {
   }
 };
 
-const destroyRules = {
+const findIdRules = {
   id: {
     notEmpty: {
       errorMessage: 'error_required'
@@ -139,5 +139,5 @@ const destroyRules = {
 exports.showTransportRules = showTransportRules ;
 exports.saveRules = saveRules ;
 exports.updateRules = updateRules ;
-exports.destroyRules = destroyRules ;
+exports.findIdRules = findIdRules ;
 
