@@ -173,11 +173,37 @@ const showOne = (req, res) => {
 
 };
 
+// show all transports from db
+const showAll = (req, res) => {
+  'use strict';
+
+  req.getValidationResult().then((result) => {
+    if (!result.isEmpty()) {
+      res.json({
+        result: 'error',
+        message: util.inspect(result.array())
+      });
+      return;
+    }
+
+    models.Travel
+      .findAll()
+      .then((travel) => {
+        res.json({ result: travel });
+      })
+      .catch((error) => {
+        res.json({ result: error });
+      });
+  });
+
+};
+
 module.exports = {
   show,
   showTransport,
   save,
   update,
   destroy,
-  showOne
+  showOne,
+  showAll
 };

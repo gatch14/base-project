@@ -14,4 +14,6 @@ router.post('/transport/destroy', Controller.destroy);
 
 router.post('/transport/showOne', Controller.showOne);
 
+router.get('/transport/showAll', Controller.showAll);
+
 module.exports = router;

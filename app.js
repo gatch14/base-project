@@ -8,6 +8,8 @@ const expressValidator = require('express-validator');
 
 const index = require('./routes/index');
 const transport = require('./routes/transport');
+const scrap = require('./routes/scrap');
+
 const app = express();
 
 // view engine setup
@@ -24,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressValidator());
 app.use('/', index);
 app.use('/api/transports', transport);
+app.use('/scrap', scrap);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
