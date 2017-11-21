@@ -136,8 +136,8 @@ const findIdRules = {
   }
 };
 
-exports.showTransportRules = showTransportRules ;
-exports.saveRules = saveRules ;
-exports.updateRules = updateRules ;
-exports.findIdRules = findIdRules ;
+exports.showTransportRules = showTransportRules;
+exports.saveRules = saveRules;
+exports.updateRules = updateRules;
+exports.findIdRules = findIdRules;
 
