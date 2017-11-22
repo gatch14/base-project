@@ -10,10 +10,10 @@ router.post('/transport/save', Controller.save);
 
 router.put('/transport/update', Controller.update);
 
-router.post('/transport/destroy', Controller.destroy);
+router.delete('/transport/destroy', Controller.destroy);
 
-router.post('/transport/showOne', Controller.showOne);
+router.post('/transport/findOne', Controller.findOne);
 
-router.get('/transport/showAll', Controller.showAll);
+router.get('/transport/findAll', Controller.findAll);
 
 module.exports = router;

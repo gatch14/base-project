@@ -67,8 +67,8 @@ const save = (req, res) => {
         comment: req.body.comment
       })
       .save()
-      .then((travel) => {
-        res.json({ travel });
+      .then((newTravel) => {
+        res.json({ newTravel });
       })
       .catch((error) => {
         res.json({ result: error });
@@ -146,7 +146,7 @@ const destroy = (req, res) => {
 };
 
 // show transport from db
-const showOne = (req, res) => {
+const findOne = (req, res) => {
   'use strict';
   req.check(findIdRules);
 
@@ -174,7 +174,7 @@ const showOne = (req, res) => {
 };
 
 // show all transports from db
-const showAll = (req, res) => {
+const findAll = (req, res) => {
   'use strict';
 
   req.getValidationResult().then((result) => {
@@ -204,6 +204,6 @@ module.exports = {
   save,
   update,
   destroy,
-  showOne,
-  showAll
+  findOne,
+  findAll
 };

@@ -27,6 +27,10 @@
     "serve-favicon": "~2.4.5"
   },
   "devDependencies": {
-    "eslint": "^4.11.0"
+    "expect": "^21.2.1",
+    "eslint": "^4.11.0",
+    "superagent": "^3.8.1",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.0"
   }
 }
