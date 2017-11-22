@@ -1,7 +1,10 @@
 const cheerio = require('cheerio');
 const phantom = require('phantom');
 
-// scrap url and return in json
+/**
+ * scrap url
+ * @returns data in json
+ */
 const scrap = async(req, res) => {
   'use strict';
   const url = 'http://www.reseau-stas.fr/fr/actus-et-infos-reseau/3';
