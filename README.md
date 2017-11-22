@@ -1,11 +1,12 @@
 # base-project
 A tiny base project for a REST API with NodeJS.
 
-1) Install packages: npm install
-2) Create your postgres database
-3) In config/config.json change your auth for database connection
-4) Run migration: node_modules/.bin/sequelize db:migrate
-5) npm start
+1) Clone this repository
+2) Install packages: npm install
+3) Create your postgres database
+4) In config/config.json change your auth for database connection
+5) Run migration: node_modules/.bin/sequelize db:migrate
+6) npm start
 
 Access in your browser to show travel in json with google map:
 http://localhost:3000/api/transports
